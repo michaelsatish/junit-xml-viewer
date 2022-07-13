@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"errors"
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"text/template"
 )
@@ -54,7 +54,7 @@ func main() {
 	flag.StringVar(&xmlPath, "f", "", "Path to the JUnit XML file.")
 	flag.Parse()
 
-	// Check if the xml file exists.
+	// Check if the xml file exists and read the contents.
 	if xmlPath == "" {
 		log.Fatal("Please provide a path to the JUnit XML file.")
 	}
@@ -66,7 +66,7 @@ func main() {
 	data, err := ioutil.ReadFile(xmlPath)
 	checkError(err)
 
-	// unmarshal the xml file into a TestSuites struct.
+	// unmarshal the xml file contents into a TestSuites struct.
 	var testSuites TestSuites
 	err = xml.Unmarshal(data, &testSuites)
 	checkError(err)
@@ -75,15 +75,23 @@ func main() {
 	tmpl, err := template.ParseFiles("dashboard.html")
 	checkError(err)
 
-	// Create a new tmp file.
-	tmpFile, err := ioutil.TempFile("junit-xml-viewer", "dashboard.*.html")
+	// Create a new temporary html file.
+	tmpFile, err := ioutil.TempFile("", "dashboard.*.html")
 	checkError(err)
+	defer tmpFile.Close()
 	defer os.Remove(tmpFile.Name())
 
 	// Write the dashboard template to the tmp file.
 	err = tmpl.Execute(tmpFile, testSuites)
 	checkError(err)
 
-	// Open the tmp file in the web browser.
-	fmt.Println(tmpFile.Name())
+	// Open the temporary html file in the web browser.
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, tmpFile.Name())
+	})
+	log.Println("Serving the dashboard at http://localhost:8080/")
+	log.Println("Press CTRL+C to stop the server.")
+
+	err = http.ListenAndServe(":8080", nil)
+	checkError(err)
 }
