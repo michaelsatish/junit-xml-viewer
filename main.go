@@ -141,7 +141,7 @@ func render(method string, tmpl *template.Template, testSuites *TestSuites) erro
 func main() {
 	// Parse the command line flags.
 	flag.StringVar(&xmlPath, "f", "", "Path to the JUnit XML file.")
-	flag.StringVar(&renderMethod, "m", "server", "Method to render the JUnit XML file. Possible values: server, stdout, output.")
+	flag.StringVar(&renderMethod, "m", "server", "Method to render the JUnit XML file. Acceptable values: server, stdout, output.")
 	flag.StringVar(&outputFile, "o", "", "Path to the output file.")
 	flag.StringVar(&serverPort, "p", "8080", "Port to serve the dashboard on.")
 	flag.Parse()
