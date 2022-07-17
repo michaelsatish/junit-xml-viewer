@@ -10,11 +10,17 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+.DS_Store
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+bin/
+_tmp/
 
-# Go workspace file
-go.work
+.vscode
+artifacts/gcloud/
+Makefile.dev
+
+vendor
+coverage.txt
 
 *.xml
+*.html
