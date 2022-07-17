@@ -1,19 +1,114 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Test Execution</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   </head>
   <body>
-    <div class="container">
+    <!-- navbar -->
+    <nav class="navbar has-shadow">
+      <div class="container" style="flex-grow: 1; justify-content: center;">
+        <p class="is-size-5 navbar-brand navbar-item">JUnit XML Viewer</p>
+      </div>
+    </nav>
+    <!-- Testsuites tab -->
+    <div class="container section">
+      <div class="tabs is-centered">
+        {{range .TestSuites}}
         <ul>
-            {{range .TestSuites}}
-                <li>{{.Name}}</li>
-            {{end}}
-        </ul>
+          <li>
+            <a href="#">{{.Name}} ({{.Time}})</a>
+          </li>
+        {{end}}
+      </div>
+      {{range .TestSuites}}
+      <!-- Testsuites cards -->
+      <div class="columns">
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-grey-light">
+              <p class="card-header-title">Tests</p>
+            </header>
+            <div class="card-content">
+              <div class="content">{{.Tests}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-success">
+              <p class="card-header-title">Success</p>
+            </header>
+            <div class="card-content">
+              <div class="content">{{.GetSuccessCount}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-danger">
+              <p class="card-header-title">Failures</p>
+            </header>
+            <div class="card-content">
+              <div class="content">{{.Failures}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-warning">
+              <p class="card-header-title">Errors</p>
+            </header>
+            <div class="card-content">
+              <div class="content">{{.Errors}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header has-background-link-light">
+              <p class="card-header-title">Skipped</p>
+            </header>
+            <div class="card-content">
+              <div class="content">{{.Skipped}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Testcases table -->
+      {{if .TestCases}}
+      <div class="columns">
+        <div class="column">
+          <table class="table is-fullwidth is-hoverable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Class Name</th>
+                <th>Name</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range $i, $tc := .TestCases}}
+              {{if $tc.Failure.Message}}
+                <tr class="has-background-danger">
+              {{else}}
+                <tr>
+              {{end}}
+                  <td>{{$i}}</td>
+                  <td>{{$tc.ClassName}}</td>
+                  <td>{{$tc.Name}}</td>
+                  <td>{{$tc.Time}}</td>
+                </tr>
+              {{end}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {{end}}
+      {{end}}
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
   </body>
 </html>
