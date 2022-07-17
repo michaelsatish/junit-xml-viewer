@@ -61,7 +61,7 @@ func (ts *TestSuite) GetSuccessCount() int {
 
 type TestCase struct {
 	XMLName   xml.Name `xml:"testcase"`
-	Classname string   `xml:"classname,attr"`
+	ClassName string   `xml:"classname,attr"`
 	Name      string   `xml:"name,attr"`
 	Time      string   `xml:"time,attr"`
 	Failure   Failure  `xml:"failure,omitempty"`
@@ -132,7 +132,7 @@ func render(method string, tmpl *template.Template, testSuites *TestSuites) erro
 			return err
 		}
 	default:
-		return errors.New("Please provide a valid render method.")
+		return errors.New("please provide a valid render method")
 	}
 
 	return nil
