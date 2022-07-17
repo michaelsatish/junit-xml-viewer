@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"text/template"
 )
 
@@ -35,9 +36,27 @@ type TestSuite struct {
 	Failures  string     `xml:"failures,attr"`
 	Skipped   string     `xml:"skipped,attr"`
 	Tests     string     `xml:"tests,attr"`
+	Time      string     `xml:"time,attr"`
 	Timestamp string     `xml:"timestamp,attr"`
 	Hostname  string     `xml:"hostname,attr"`
 	TestCases []TestCase `xml:"testcase"`
+}
+
+// GetSuccessCount returns the number of successful tests.
+func (ts *TestSuite) GetSuccessCount() int {
+	tests, err := strconv.Atoi(ts.Tests)
+	checkError(err)
+
+	failures, err := strconv.Atoi(ts.Failures)
+	checkError(err)
+
+	errors, err := strconv.Atoi(ts.Errors)
+	checkError(err)
+
+	skipped, err := strconv.Atoi(ts.Skipped)
+	checkError(err)
+
+	return tests - failures - errors - skipped
 }
 
 type TestCase struct {
