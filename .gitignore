@@ -21,6 +21,3 @@ Makefile.dev
 
 vendor
 coverage.txt
-
-*.xml
-*.html

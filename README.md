@@ -7,8 +7,7 @@ A tiny cli application that can read a JUnit XML file and makes it readable.
 ```text
 Options:
   -f Path to the JUnit XML file.
-  -m Method to render the JUnit XML file. Acceptable values: server, stdout, output.
-  -o Path to the output file.
+  -e To render the dashboard to stdout.
   -p Port to serve the dashboard on.
 ```
 
@@ -21,14 +20,8 @@ Serving the dashboard at http://localhost:8080/
 Press CTRL+C to stop the server.
 ```
 
-You can write the HTML document to stdout by changing the render method to "stdout".
+You can write the HTML document to stdout by passing the -e flag.
 
 ```sh
-jvx -f test.xml -m stdout
-```
-
-You can write the HTLM document to a file by changing the render method to "output" and passing in the output path.
-
-```sh
-jvx -f test.xml -m output -o dashboard.html
+jvx -f test.xml -e
 ```
