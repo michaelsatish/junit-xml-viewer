@@ -144,7 +144,7 @@ func main() {
 
 	// Print the version.
 	if vFlag {
-		log.Println("Version:", version)
+		fmt.Println("Version:", version)
 		os.Exit(0)
 	}
 
