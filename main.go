@@ -149,7 +149,16 @@ func main() {
 	checkError(err)
 
 	// Create a new dashboard template.
-	tmpl, err := template.ParseFiles("dashboard.html")
+	funcMap := template.FuncMap{
+		"inc": func(i int) int {
+			return i + 1
+		},
+	}
+
+	b, err := ioutil.ReadFile("dashboard.html")
+	checkError(err)
+
+	tmpl, err := template.New("dashboard").Funcs(funcMap).Parse(string(b))
 	checkError(err)
 
 	// Render the dashboard template.
