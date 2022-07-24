@@ -63,6 +63,7 @@ type TestCase struct {
 	Time      string   `xml:"time,attr"`
 	Failure   Failure  `xml:"failure,omitempty"`
 	Error     Error    `xml:"error,omitempty"`
+	Skipped   Skipped  `xml:"skipped,omitempty"`
 }
 
 type Failure struct {
@@ -75,6 +76,12 @@ type Error struct {
 	XMLName xml.Name `xml:"error"`
 	Message string   `xml:"message,attr"`
 	Value   string   `xml:",chardata"`
+}
+
+type Skipped struct {
+	XMLName xml.Name `xml:"skipped"`
+	Type    string   `xml:"type,attr"`
+	Message string   `xml:"message,attr"`
 }
 
 // checkError checks if an error occurred and if so, it logs it and exits the program.
