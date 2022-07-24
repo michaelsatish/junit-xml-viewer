@@ -1,10 +1,13 @@
-.PHONY: vet fmt build
+.PHONY: vet fmt test build
 
 vet:
 	go vet ./...
 
 fmt:
-	go fmt ./...
+	go fmt -x ./...
 
-build:
-	CGO_ENABLED=0 go build -a -o ./bin/jxv
+test:
+	go test ./...
+
+build-dev: vet fmt test
+	CGO_ENABLED=0 go build -ldflags "-X main.version=dev" -a -o ./bin/jxv
