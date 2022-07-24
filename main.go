@@ -57,23 +57,24 @@ func (ts *TestSuite) GetSuccessCount() int {
 }
 
 type TestCase struct {
-	XMLName    xml.Name   `xml:"testcase"`
-	ClassName  string     `xml:"classname,attr"`
-	Name       string     `xml:"name,attr"`
-	Time       string     `xml:"time,attr"`
-	Properties []Property `xml:"properties,omitempty"`
-	Failure    Failure    `xml:"failure,omitempty"`
-}
-
-type Property struct {
-	XMLName xml.Name `xml:"property"`
-	Name    string   `xml:"name,attr"`
-	Value   string   `xml:"value,attr"`
+	XMLName   xml.Name `xml:"testcase"`
+	ClassName string   `xml:"classname,attr"`
+	Name      string   `xml:"name,attr"`
+	Time      string   `xml:"time,attr"`
+	Failure   Failure  `xml:"failure,omitempty"`
+	Error     Error    `xml:"error,omitempty"`
 }
 
 type Failure struct {
 	XMLName xml.Name `xml:"failure"`
 	Message string   `xml:"message,attr"`
+	Value   string   `xml:",chardata"`
+}
+
+type Error struct {
+	XMLName xml.Name `xml:"error"`
+	Message string   `xml:"message,attr"`
+	Value   string   `xml:",chardata"`
 }
 
 // checkError checks if an error occurred and if so, it logs it and exits the program.
