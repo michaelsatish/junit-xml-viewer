@@ -57,11 +57,18 @@ func (ts *TestSuite) GetSuccessCount() int {
 }
 
 type TestCase struct {
-	XMLName   xml.Name `xml:"testcase"`
-	ClassName string   `xml:"classname,attr"`
-	Name      string   `xml:"name,attr"`
-	Time      string   `xml:"time,attr"`
-	Failure   Failure  `xml:"failure,omitempty"`
+	XMLName    xml.Name   `xml:"testcase"`
+	ClassName  string     `xml:"classname,attr"`
+	Name       string     `xml:"name,attr"`
+	Time       string     `xml:"time,attr"`
+	Properties []Property `xml:"properties,omitempty"`
+	Failure    Failure    `xml:"failure,omitempty"`
+}
+
+type Property struct {
+	XMLName xml.Name `xml:"property"`
+	Name    string   `xml:"name,attr"`
+	Value   string   `xml:"value,attr"`
 }
 
 type Failure struct {
@@ -77,7 +84,7 @@ func checkError(err error) {
 }
 
 // serve serves the dashboard.
-func serve(tmpl *template.Template, testSuites *TestSuites) error {
+func serve(tmpl *template.Template, ts *TestSuite) error {
 	// Create a new temporary html file.
 	tmpFile, err := ioutil.TempFile("", "dashboard.*.html")
 	if err != nil {
@@ -88,7 +95,7 @@ func serve(tmpl *template.Template, testSuites *TestSuites) error {
 	defer os.Remove(tmpFile.Name())
 
 	// Write the dashboard template to the tmp file.
-	err = tmpl.Execute(tmpFile, testSuites)
+	err = tmpl.Execute(tmpFile, ts)
 	if err != nil {
 		return err
 	}
@@ -109,8 +116,8 @@ func serve(tmpl *template.Template, testSuites *TestSuites) error {
 }
 
 // expStdout renders the dashboard to stdout.
-func expStdout(tmpl *template.Template, testSuites *TestSuites) error {
-	err := tmpl.Execute(os.Stdout, testSuites)
+func expStdout(tmpl *template.Template, ts *TestSuite) error {
+	err := tmpl.Execute(os.Stdout, ts)
 	if err != nil {
 		return err
 	}
@@ -146,11 +153,12 @@ func main() {
 	checkError(err)
 
 	// Render the dashboard template.
+	ts := testSuites.TestSuites[0]
 	if export {
-		err := expStdout(tmpl, &testSuites)
+		err := expStdout(tmpl, &ts)
 		checkError(err)
 	} else {
-		err := serve(tmpl, &testSuites)
+		err := serve(tmpl, &ts)
 		checkError(err)
 	}
 }
