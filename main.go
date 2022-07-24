@@ -20,6 +20,8 @@ var (
 	xmlPath    string
 	serverPort string
 	export     bool
+	version    string
+	vFlag      bool
 )
 
 type TestSuites struct {
@@ -137,7 +139,14 @@ func main() {
 	flag.StringVar(&xmlPath, "f", "", "Path to the JUnit XML file.")
 	flag.StringVar(&serverPort, "p", "8080", "Port to serve the dashboard on.")
 	flag.BoolVar(&export, "e", false, "Render to stdout.")
+	flag.BoolVar(&vFlag, "v", false, "Print the version.")
 	flag.Parse()
+
+	// Print the version.
+	if vFlag {
+		log.Println("Version:", version)
+		os.Exit(0)
+	}
 
 	// Check if the xml file exists and read the contents.
 	if xmlPath == "" {
