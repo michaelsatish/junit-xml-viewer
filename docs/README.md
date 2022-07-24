@@ -63,3 +63,5 @@ jvx -f test.xml
 Serving the dashboard at http://localhost:8080/
 Press CTRL+C to stop the server.
 ```
+
+![dashboard](dashboard.png)
