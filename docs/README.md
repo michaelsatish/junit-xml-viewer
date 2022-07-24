@@ -27,6 +27,10 @@ You can write the HTML document to stdout by passing the -e flag.
 jvx -f test.xml -e
 ```
 
+## Download
+
+Binaries are available to download from release page.
+
 ## Example
 
 ```python
