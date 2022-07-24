@@ -65,3 +65,15 @@ Press CTRL+C to stop the server.
 ```
 
 ![dashboard](dashboard.png)
+
+Clicking on rows with tags "Fail" or "Error" opens a model to show the value from XML. And tag "Skip" shows the reason for skipping.
+
+**Skip**
+![dashboard](skip.png)
+
+**Fail**
+![dashboard](fail.png)
+
+
+## Issues and Contributing
+If you find an issue with this library, please report an issue. If you'd like to contribute, fork this library and submit a pull request.
