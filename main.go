@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"encoding/xml"
 	"errors"
 	"flag"
@@ -23,6 +24,9 @@ var (
 	version    string
 	vFlag      bool
 )
+
+//go:embed dashboard.html
+var f embed.FS
 
 type TestSuites struct {
 	XMLName    xml.Name    `xml:"testsuites"`
@@ -172,7 +176,7 @@ func main() {
 		},
 	}
 
-	b, err := ioutil.ReadFile("dashboard.html")
+	b, err := f.ReadFile("dashboard.html")
 	checkError(err)
 
 	tmpl, err := template.New("dashboard").Funcs(funcMap).Parse(string(b))
