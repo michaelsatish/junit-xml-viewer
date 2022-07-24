@@ -6,7 +6,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   </head>
-  <body>
+  <body class="has-background-light">
     <!-- navbar -->
     <nav class="navbar has-shadow">
       <div class="container" style="flex-grow: 1; justify-content: center;">
@@ -15,100 +15,95 @@
     </nav>
     <!-- Testsuites tab -->
     <div class="container section">
-      <div class="tabs is-centered">
-        {{range .TestSuites}}
-        <ul>
-          <li>
-            <a href="#">{{.Name}} ({{.Time}})</a>
-          </li>
+      <div class="block has-text-centered">
+        <h1 class="has-text-weight-medium">{{.Name}} (Time: {{.Time}}, Timestamp: {{.Timestamp}})</h1>
+      </div>
+      <div id="{{.Name}}">
+        <!-- Testsuites cards -->
+        <div class="columns">
+          <div class="column">
+            <div class="card">
+              <header class="card-header has-background-grey-light">
+                <p class="card-header-title">Tests</p>
+              </header>
+              <div class="card-content">
+                <div class="content">{{.Tests}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="card">
+              <header class="card-header has-background-success">
+                <p class="card-header-title">Success</p>
+              </header>
+              <div class="card-content">
+                <div class="content">{{.GetSuccessCount}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="card">
+              <header class="card-header has-background-danger">
+                <p class="card-header-title">Failures</p>
+              </header>
+              <div class="card-content">
+                <div class="content">{{.Failures}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="card">
+              <header class="card-header has-background-warning">
+                <p class="card-header-title">Errors</p>
+              </header>
+              <div class="card-content">
+                <div class="content">{{.Errors}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="card">
+              <header class="card-header has-background-link-light">
+                <p class="card-header-title">Skipped</p>
+              </header>
+              <div class="card-content">
+                <div class="content">{{.Skipped}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Testcases table -->
+        {{if .TestCases}}
+        <div class="columns">
+          <div class="column">
+            <table class="table is-fullwidth is-hoverable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Class Name</th>
+                  <th>Name</th>
+                  <th>Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{range $i, $tc := .TestCases}}
+                {{if $tc.Failure.Message}}
+                  <tr class="has-background-danger-light is-clickable">
+                {{else}}
+                  <tr>
+                {{end}}
+                    <td>{{$i}}</td>
+                    <td>{{$tc.ClassName}}</td>
+                    <td>{{$tc.Name}}</td>
+                    <td>{{$tc.Time}}</td>
+                  </tr>
+                {{end}}
+              </tbody>
+            </table>
+          </div>
+        </div>
         {{end}}
       </div>
-      {{range .TestSuites}}
-      <!-- Testsuites cards -->
-      <div class="columns">
-        <div class="column">
-          <div class="card">
-            <header class="card-header has-background-grey-light">
-              <p class="card-header-title">Tests</p>
-            </header>
-            <div class="card-content">
-              <div class="content">{{.Tests}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <header class="card-header has-background-success">
-              <p class="card-header-title">Success</p>
-            </header>
-            <div class="card-content">
-              <div class="content">{{.GetSuccessCount}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <header class="card-header has-background-danger">
-              <p class="card-header-title">Failures</p>
-            </header>
-            <div class="card-content">
-              <div class="content">{{.Failures}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <header class="card-header has-background-warning">
-              <p class="card-header-title">Errors</p>
-            </header>
-            <div class="card-content">
-              <div class="content">{{.Errors}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="card">
-            <header class="card-header has-background-link-light">
-              <p class="card-header-title">Skipped</p>
-            </header>
-            <div class="card-content">
-              <div class="content">{{.Skipped}}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Testcases table -->
-      {{if .TestCases}}
-      <div class="columns">
-        <div class="column">
-          <table class="table is-fullwidth is-hoverable">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Class Name</th>
-                <th>Name</th>
-                <th>Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{range $i, $tc := .TestCases}}
-              {{if $tc.Failure.Message}}
-                <tr class="has-background-danger">
-              {{else}}
-                <tr>
-              {{end}}
-                  <td>{{$i}}</td>
-                  <td>{{$tc.ClassName}}</td>
-                  <td>{{$tc.Name}}</td>
-                  <td>{{$tc.Time}}</td>
-                </tr>
-              {{end}}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      {{end}}
-      {{end}}
     </div>
   </body>
 </html>
