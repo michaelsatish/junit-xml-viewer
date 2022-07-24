@@ -83,20 +83,56 @@
                   <th>Class Name</th>
                   <th>Name</th>
                   <th>Time</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {{range $i, $tc := .TestCases}}
-                {{if $tc.Failure.Message}}
-                  <tr class="has-background-danger-light is-clickable">
-                {{else}}
-                  <tr>
-                {{end}}
-                    <td>{{$i}}</td>
-                    <td>{{$tc.ClassName}}</td>
-                    <td>{{$tc.Name}}</td>
-                    <td>{{$tc.Time}}</td>
-                  </tr>
+                <tr class="is-clickable">
+                  <td>{{inc $i}}</td>
+                  <td>{{$tc.ClassName}}</td>
+                  <td>{{$tc.Name}}</td>
+                  <td>{{$tc.Time}}</td>
+                  <td>
+                    {{if $tc.Failure.Message}}
+                    <span class="tag is-danger is-light">Fail</span>
+                    <div class="modal">
+                      <div class="modal-background"></div>
+                      <div class="modal-card">
+                        <section class="modal-card-body">
+                          <pre>
+                            <code>{{$tc.Failure.Value}}</code>
+                          </pre>
+                        </section>
+                      </div>
+                    </div>
+                    {{end}}
+                    {{if $tc.Error.Message}}
+                    <span class="tag is-warning is-light">Error</span>
+                    <div class="modal">
+                      <div class="modal-background"></div>
+                      <div class="modal-card">
+                        <section class="modal-card-body">
+                          <pre>
+                            <code>{{$tc.Error.Value}}</code>
+                          </pre>
+                        </section>
+                      </div>
+                    </div>
+                    {{end}}
+                    {{if $tc.Skipped.Message}}
+                    <span class="tag is-link is-light">Skip</span>
+                    <div class="modal">
+                      <div class="modal-background"></div>
+                      <div class="modal-card">
+                        <section class="modal-card-body">
+                          <h4 class="subtitle is-size-4"><b>Reason: </b>{{$tc.Skipped.Message}}</h4>
+                        </section>
+                      </div>
+                    </div>
+                    {{end}}
+                  </td>
+                </tr>
                 {{end}}
               </tbody>
             </table>
@@ -105,5 +141,16 @@
         {{end}}
       </div>
     </div>
+    <script>
+      const trs = document.querySelectorAll('tr');
+      trs.forEach(tr => {
+        const modal = tr.querySelector('.modal');
+        if (modal) {
+          tr.addEventListener('click', () => {
+            modal.classList.toggle('is-active');
+          });
+        }
+      });
+    </script>
   </body>
 </html>
