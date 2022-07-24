@@ -9,6 +9,7 @@ Options:
   -f Path to the JUnit XML file.
   -e To render the dashboard to stdout.
   -p Port to serve the dashboard on.
+  -v Print the version.
 ```
 
 By default, the JUnit XML file is rendered to an HTML document and served on the default port 8080. 
