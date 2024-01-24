@@ -38,7 +38,7 @@ type TestSuite struct {
 	Name      string     `xml:"name,attr"`
 	Errors    string     `xml:"errors,attr"`
 	Failures  string     `xml:"failures,attr"`
-	Skipped   string     `xml:"skipped,attr"`
+	Skipped   string     `xml:"skipped,attr,omitempty"`
 	Tests     string     `xml:"tests,attr"`
 	Time      string     `xml:"time,attr"`
 	Timestamp string     `xml:"timestamp,attr"`
@@ -57,8 +57,13 @@ func (ts *TestSuite) GetSuccessCount() int {
 	tests := intCov(ts.Tests)
 	failures := intCov(ts.Failures)
 	errors := intCov(ts.Errors)
-	skipped := intCov(ts.Skipped)
 
+	// Not all test suites have skipped tests.
+	if ts.Skipped == "" {
+		return tests - failures - errors
+	}
+
+	skipped := intCov(ts.Skipped)
 	return tests - failures - errors - skipped
 }
 
@@ -161,7 +166,7 @@ func main() {
 		log.Fatal("The JUnit XML file does not exist in the given path.")
 	}
 
-	data, err := ioutil.ReadFile(xmlPath)
+	data, err := os.ReadFile(xmlPath)
 	checkError(err)
 
 	// Unmarshal the xml file contents into a TestSuites struct.
